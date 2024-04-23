@@ -1,9 +1,7 @@
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-
 public class Student {
-    static ArrayList<Student> s = new ArrayList<Student>();
+    private static ArrayList<Student> allStudents = new ArrayList();
 
     private String imie;
     private String nazwisko;
@@ -12,36 +10,68 @@ public class Student {
     private String nrTel;
     private Date dataUrodzenia;
     private String numerIndeksu;
-    private HashMap<Integer, String>oceny = new HashMap<>();
+    private StatusStudenta statusStudenta;
+    private StudyProgramme studyProgramme;
+    private int itnCount;
+    private ArrayList<Grade> grades = new ArrayList();
+    private static int studentCount = 0;
     private int semestr;
-    private String statusStudenta;
 
-    public Student(String imie, String nazwisko, String email, String adres, String nrTel, Date dataUrodzenia,String numerIndeksu) {
+    public Student(String imie, String nazwisko, String email, String adres, String nrTel, Date dataUrodzenia) {
         this.imie = imie;
         this.nazwisko = nazwisko;
         this.email = email;
         this.adres = adres;
         this.nrTel = nrTel;
         this.dataUrodzenia = dataUrodzenia;
-        this.numerIndeksu=numerIndeksu;
-
-        this.s = new ArrayList<Student>();
-
-//    public Student (){
-//        s.add(this);
-//    }
-//    public void introduction(){
-//        System.out.println("Hello");
-//    }
-//    Student.introduction()
+        this.itnCount = 0;
+        studentCount++;
+        this.numerIndeksu = "s" + String.valueOf(studentCount);
+        this.statusStudenta = StatusStudenta.KANDYDAT;
+        allStudents.add(this);
     }
+    public static void promoteAllStudents(){
+        for (Student s : allStudents){
+            if (s.studyProgramme == null) continue;
+            if (s.itnCount > s.studyProgramme.itn) continue;
+            if (s.semestr == s.studyProgramme.ileSemestrów){
+                s.statusStudenta = StatusStudenta.ABSOLWENT;
+                continue;
+            }
+            if (s.semestr != 0)s.semestr++;
 
-
-    public void addGrade(int ocena, String przedmiot) {
-        this.oceny.put(ocena, przedmiot);
+        }
     }
     public void enrollStudent(StudyProgramme sp){
-        this.semestr = sp.getSemester() + 1;
-        this.statusStudenta = this.semestr == 1 ? "Kandydat" : (this.semestr == 7 ? "Absolwent" : "Student");
+        this.studyProgramme = sp;
+        this.semestr = 1;
+        this.statusStudenta = StatusStudenta.STUDENT;
+    }
+
+    public void addGrade(int grade, String subject){
+        this.grades.add(new Grade(grade, subject));
+    }
+
+    @java.lang.Override
+    public String toString() {
+        String gradesString = "";
+        for (Grade g : grades){
+            gradesString += g.toString();
+        }
+
+        return "DANE: \n" +
+                "IMIE='" + imie + '\'' +
+                ", NAZWISKO='" + nazwisko + '\'' +
+                ", EMAIL='" + email + '\'' +
+                ", ADRES='" + adres + '\'' +
+                ", NUMER TELEFONU='" + nrTel + '\'' +
+                ", DATA URODZENIA=" + dataUrodzenia +
+                "\nDANE STUDENTA: \n" +
+                "es='" + numerIndeksu + '\'' +
+                ", STATUS STUDENTA=" + statusStudenta +
+                ", SEMESTR=" + semestr +
+                ", studyProgramme=" + studyProgramme +
+                ", itnCount=" + itnCount +
+                ", grades=" + grades + "\n";
     }
 }

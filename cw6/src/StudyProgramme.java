@@ -1,21 +1,21 @@
-import java.util.ArrayList;
-
 public class StudyProgramme {
 
     private String nazwaPrzedmiotu;
     private String opisPrzedmiotu;
-    private int semestr;
+    int ileSemestrów;
+    int itn;
 
-    private int itn;
-
-    public StudyProgramme(String nazwaPrzedmiotu, String opisPrzedmiotu, int semestr,int itn){
+    public StudyProgramme(String nazwaPrzedmiotu, String opisPrzedmiotu, int ileSemestrów, int itn){
         this.nazwaPrzedmiotu=nazwaPrzedmiotu;
         this.opisPrzedmiotu=opisPrzedmiotu;
-        this.semestr=semestr;
+        this.ileSemestrów=ileSemestrów;
         this.itn=itn;
     }
-
-    public int getSemester() {
-        return 0;
+    @java.lang.Override
+    public String toString() {
+        return " [Name='" + nazwaPrzedmiotu + '\'' +
+                ", description='" + opisPrzedmiotu + '\'' +
+                ", howManySemesters=" + ileSemestrów +
+                ", allowedItn=" + itn + " ]";
     }
 }
